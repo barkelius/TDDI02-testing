@@ -61,7 +61,7 @@ Allied::Allied(string filePath,int roomId){
   file.open(filePath.c_str());
   if(!file.is_open())
     cerr << "error: can't open file\n";
-  while(true){
+  while(!file.eof()){
     getline(file,x,';');
     b = stringToInt(x);
     if(b == roomId){
@@ -70,7 +70,7 @@ Allied::Allied(string filePath,int roomId){
     getline(file,x,'¤');
   }
   b = 0;
-  while(true){
+  while(!file.eof()){
     getline(file,x,';');
     b = stringToInt(x);
     if(b >= 3000 && b < 4000){

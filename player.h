@@ -76,7 +76,7 @@ Player::Player(string filePath){
   file.open(filePath.c_str());
   if(!file.is_open())
     cerr << "error: can't open file\n";
-  while(true){
+  while(!file.eof()){
     getline(file,x,';');
     b = stringToInt(x);
     if(b >= 80000)
