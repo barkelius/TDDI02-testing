@@ -10,5 +10,6 @@ int main(){
     friend1.printAllied();
     Allied friend2("adventure.txt",1003);
     friend2.printAllied();
+    //testar
 return 0;
 }
