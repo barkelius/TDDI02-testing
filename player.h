@@ -128,11 +128,44 @@ void Player::useItem(string name){
     }
 *//*
     void Player::pickUpItem(string name){
+        int itemId;
         for(unsigned i = 0; i < currentRoom.itemList.size(); ++i){
             if(currentRoom.itemList[i].itemName == name){
                 inventory.push_back(currentRoom.itemList[i]);
+		itemId = currentRoom.itemList[i].itemId;
             }
         }
+
+    //<----otestat start------>
+    vector <string> lines;
+    ifstream inFile;
+    string str,str2;
+   // int itemId = 2008;
+    int lineToDelete = 0;
+    // lägg till loop som hittar rätt rum( ta den från character.h)
+    
+    inFile.open("adventure2.txt");
+    while(!inFile.eof()){
+      getline(inFile,str,';');
+      if(stringToInt(str) == itemId)
+	lineToDelete = lines.size();
+      getline(inFile,str2);
+      lines.push_back(str + ";" + str2);
+    }
+    inFile.close();
+    //lines.delete(lineToDelete);
+    string removeFile = "adventure3.txt";
+    if(remove(removeFile.c_str()) != 0 )
+      cerr << "failed to remove file" << removeFile << endl;
+    ofstream outFile;
+    lines.erase(lines.begin()+lineToDelete);
+    outFile.open("adventure3.txt");
+    for(int i = 0; i < lines.size(); ++i){  
+      outFile << lines[i] << "\n";
+    }
+    //<----otestat end------>
+
+
     }
     */
 /*
