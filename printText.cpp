@@ -101,20 +101,15 @@ void printText(string text){
 
   vector<string> lines;
   string temp;
-  int length = text.length();
   while(text.length() > 50){
     int pos = text.rfind(" ",50);
-    temp = text.substr(pos,length);
+    temp = text.substr(pos+1,text.length());
     text.resize(pos);
-    lines.push_back(text);
-    length = text.length();
+    lines.push_back(text);;
     text = temp;
-   
   }
 
-  //lines.push_back(text);
-  //string bla = "hej";
-  // lines.push_back(bla);
+  lines.push_back(text);
   
   for(int i = 0; i < lines.size(); ++i){
     message = TTF_RenderText_Solid(font,lines[i].c_str(),textColor);
