@@ -142,11 +142,12 @@ void Player::useItem(string name){
             }
         }
 
-    //<----otestat start------>
+
+    //<----otestat start------> 
     vector <string> lines;
     ifstream inFile;
     string str,str2;
-   // int itemId = 2008;
+    //int itemId = 2007;
     int lineToMove = 0;    
     inFile.open("adventure2.txt");
     while(!inFile.eof()){
@@ -161,12 +162,15 @@ void Player::useItem(string name){
     if(remove(removeFile.c_str()) != 0 )
       cerr << "failed to remove file" << removeFile << endl;
     ofstream outFile;
+    if(lines[lineToMove].at(lines[lineToMove].size()-1) == '¤')
+      lines[lineToMove].erase(lines[lineToMove].end()-1);
     lines.insert(lines.begin(),lines[lineToMove]);
     lines.erase(lines.begin()+lineToMove+1);
     outFile.open("adventure3.txt");
     for(int i = 0; i < lines.size(); ++i){  
       outFile << lines[i] << "\n";
     }
+    outFile.close();
     //<----otestat end------>
 
 
