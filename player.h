@@ -15,6 +15,12 @@ int stringToInt(string str){
   ss >> x;
   return x;
 }
+string intToString(int x){
+  stringstream ss;
+  ss << x;
+  string str = ss.str();
+  return str;
+}
 
 struct Item {
   int itemId;
@@ -141,24 +147,22 @@ void Player::useItem(string name){
     ifstream inFile;
     string str,str2;
    // int itemId = 2008;
-    int lineToDelete = 0;
-    // lägg till loop som hittar rätt rum( ta den från character.h)
-    
+    int lineToMove = 0;    
     inFile.open("adventure2.txt");
     while(!inFile.eof()){
       getline(inFile,str,';');
       if(stringToInt(str) == itemId)
-	lineToDelete = lines.size();
+	lineToMove = lines.size();
       getline(inFile,str2);
       lines.push_back(str + ";" + str2);
     }
     inFile.close();
-    //lines.delete(lineToDelete);
     string removeFile = "adventure3.txt";
     if(remove(removeFile.c_str()) != 0 )
       cerr << "failed to remove file" << removeFile << endl;
     ofstream outFile;
-    lines.erase(lines.begin()+lineToDelete);
+    lines.insert(lines.begin(),lines[lineToMove]);
+    lines.erase(lines.begin()+lineToMove+1);
     outFile.open("adventure3.txt");
     for(int i = 0; i < lines.size(); ++i){  
       outFile << lines[i] << "\n";
@@ -176,13 +180,51 @@ void Player::useItem(string name){
     }*/
 /*
     void Player::walk(string direction){
+
         if(currentRoom.doorDirection(direction) != 0){
+	    //<----otestat start------> KOMMER NOG INTE FUNGERA...
+    vector <string> lines;
+    int roomId = currentRoom.getRoomId();
+    ifstream inFile;
+    string str,str2;
+    int newRoomId = 1002, inventorySize = 0;
+    int lineToMove = -1;
+    inFile.open("adventure2.txt");
+    while(!inFile.eof()){
+      getline(inFile,str,';');
+      int x = stringToInt(str);
+      if(x == 80000+currentRoom.getRoomId())
+	lineToMove = lines.size();
+      else if(x >= 2000 && x < 3000 && lineToMove == -1)
+	++inventorySize;
+      getline(inFile,str2);
+      lines.push_back(str + ";" + str2);
+    }
+    inFile.close();
+    //lines.delete(lineToDelete);
+    string removeFile = "adventure3.txt";
+    if(remove(removeFile.c_str()) != 0 )
+      cerr << "failed to remove file" << removeFile << endl;
+    ofstream outFile;
+    outFile.open("adventure3.txt");
+    lines.insert(lines.begin()+inventorySize,intToString(80000+tmpRoom.getRoomId()) + ";¤");
+    lines.erase(lines.begin()+lineToMove+1);
+    for(int i = 0; i < lines.size(); ++i){  
+      outFile << lines[i] << "\n";
+    }
+    //<----otestat end------>
+
+
             Room tmpRoom(currentRoom.doorDirection(direction))
             currentRoom = tmpRoom;
         }
         if(currentRoom.isWinRoom()){
 
         }
+
+
+
+
     }*/
 
 #endif
