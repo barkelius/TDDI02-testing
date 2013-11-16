@@ -59,6 +59,7 @@ public:
 private:
     Room currentRoom;
     vector <Item> inventory;
+    string currentFile;
 };
 
 
@@ -107,6 +108,7 @@ Player::Player(string filePath){
   Room tmpRoom(b-80000);
   currentRoom = tmpRoom;
   file.close();
+  currentFile = filePath;
 }
 
 void Player::printPlayer(){
@@ -149,7 +151,7 @@ void Player::useItem(string name){
     string str,str2;
     //int itemId = 2007;
     int lineToMove = 0;    
-    inFile.open("adventure2.txt");
+    inFile.open(currentFile.c_str());
     while(!inFile.eof()){
       getline(inFile,str,';');
       if(stringToInt(str) == itemId)
@@ -159,7 +161,7 @@ void Player::useItem(string name){
     }
     inFile.close();
     string removeFile = "adventure3.txt";
-    if(remove(removeFile.c_str()) != 0 )
+    if(remove(currentFile.c_str()) != 0 )
       cerr << "failed to remove file" << removeFile << endl;
     ofstream outFile;
     if(lines[lineToMove].at(lines[lineToMove].size()-1) == '¤')

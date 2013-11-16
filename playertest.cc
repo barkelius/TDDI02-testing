@@ -1,5 +1,6 @@
 #include "player.h"
 #include "character.h"
+#include "item.h"
 int main(){
     string filepath;
     Player daniel("adventure.txt");
