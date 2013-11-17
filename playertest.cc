@@ -1,6 +1,8 @@
+#include "functions.h"
 #include "player.h"
 #include "character.h"
-#include "item.h"
+
+//#include "item.h"
 int main(){
     string filepath;
     Player daniel("adventure.txt");
@@ -11,6 +13,5 @@ int main(){
     friend1.printAllied();
     Allied friend2("adventure.txt",1003);
     friend2.printAllied();
-  
 return 0;
 }

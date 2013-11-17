@@ -1,65 +1,94 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
 using namespace std;
 
 
-
-int stringToInt(string str){
-  stringstream ss;
-  int x;
-  ss << str;
-  ss >> x;
-  return x;
-}
 class Item
 {
  protected: 
- string Name, itemUsageText;
- int itemId;
- public:
+  string Name, itemUsageText;
+  int itemId;
  Item(string name, string text, int id) : Name(name), itemUsageText(text), itemId(id)
-    {};
- //Item(string filepath, int itemId ) : Name(), ItemUsageText(), itemId()
- // {};
-
- ~Item();
- virtual getName() = 0;
- virtual useItem() = 0;
+  {};
+  Item(string filepath, int itemId, int roomId);
+  Item();
+ public:
+  int getId();
+  string getName();
+  string useItem();
 };
 
-
-
-
-class Portable
-:public Item
+class Portable : public Item
 {
- protected:
-  Portable(string filepath, int itemId, int roomId)
+ public:
+  Portable();
+  void printPortable(){
+    cout << "id = " << itemId << endl; 
+    cout << "name = " << Name << endl;
+    cout << "usageText = " << itemUsageText << endl;
+  };
+  
+  Portable(string filepath, int itId, int roomId = 0)
    {
    ifstream file;
-   string a,s;
+   string y,x;
    int d;
-   stringstream ss;
-
+   bool Sameroom = true;
    file.open(filepath.c_str());
    if(!file.is_open())
-     cerr << "kunde inte Ã¶ppna filen \n";
-
-   while(true){
-     getline(file,x,';');
-     ss.clear();
-
-     if(stringToInt(x) == itemId)
-       break;
-
+     cerr << "kunde inte öppna filen \n";
+   if(roomId != 0){
+     while(!file.eof()){
+       getline(file,x,';');
+       d = stringToInt(x);
+       if(d == roomId)
+	 break;
+       getline(file,x,'¤');
+     }
    }
-
- public:
-  string getName();
-
-
-
- private:
-
-
+   while(!file.eof() || Sameroom == true){
+     getline(file,x,';');
+     d = stringToInt(x);
+     if(d == itId){
+       itemId = d;
+       getline(file,x,';');
+       getline(file,y,';');
+       Name = x;
+       itemUsageText = y;
+       break;
+     }
+     if(d < 2000 || d >= 3000)
+       Sameroom = false;
+   }
+   }
+  int getId();
+  string getName() ;
+  string useItem() ;
 };
 
+int Portable::getId(){
+  return itemId;
+}
+
+string Portable::getName(){
+  return Name;
+}
+string Portable::useItem(){
+  return itemUsageText;
+}
+
+Portable::Portable()
+{
+  Name = "";
+  itemUsageText = "";
+  itemId = 0;
+}
+
+Item::Item(){
+  Name = "";
+  itemUsageText = "";
+  itemId = 0;
+}

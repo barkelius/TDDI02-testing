@@ -1,5 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#include "item.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,24 +9,6 @@
 #include <sstream>
 using namespace std;
 
-int stringToInt(string str){
-  stringstream ss;
-  int x;
-  ss << str;
-  ss >> x;
-  return x;
-}
-string intToString(int x){
-  stringstream ss;
-  ss << x;
-  string str = ss.str();
-  return str;
-}
-
-struct Item {
-  int itemId;
-  string itemName,itemText;
-};
 
 
 class Room{
@@ -58,7 +41,7 @@ public:
 
 private:
     Room currentRoom;
-    vector <Item> inventory;
+    vector <Portable> inventory;
     string currentFile;
 };
 
@@ -77,7 +60,6 @@ private:
 Player::Player(string filePath){
   ifstream file;
   string x,y;
-  Item item;
   int b;
   stringstream ss;
   file.open(filePath.c_str());
@@ -88,21 +70,9 @@ Player::Player(string filePath){
     b = stringToInt(x);
     if(b >= 80000)
       break;
-    //<-- struct test -->
-    // detta borde ist vara struct test2
-    item.itemId = b;
-    getline(file,x,';');
-    item.itemName = x;
-    getline(file,y,';');
-    item.itemText = y;
-    //<-- END struct test -->
-    
-    /* //<-- struct test2 -->
-    // detta borde ist vara struct test2
     getline(file,x,';');
     getline(file,y,';');
-    Item item = new Item(b,x,y);
-    //<-- END struct test2 -->*/
+    Portable item = Portable(filePath,b);
     inventory.push_back(item);
   }
   Room tmpRoom(b-80000);
@@ -113,16 +83,16 @@ Player::Player(string filePath){
 
 void Player::printPlayer(){
   for(unsigned i = 0; i < inventory.size(); ++i){
-    cout << "itemId: " << inventory[i].itemId << endl;
-    cout << "itemName: " << inventory[i].itemName << endl;
-    cout << "itemText: " << inventory[i].itemText << endl;
+    cout << "itemId: " << inventory[i].getId() << endl;
+    cout << "itemName: " << inventory[i].getName() << endl;
+    cout << "itemText: " << inventory[i].useItem() << endl;
   }
   currentRoom.printRoom();
-}
+  }
 void Player::useItem(string name){
   for(unsigned i = 0; i < inventory.size(); ++i){
-    if(inventory[i].itemName == name){
-      cout << "tog bort: " << inventory[i].itemName << endl;
+    if(inventory[i].getName() == name){
+      cout << "tog bort: " << inventory[i].getName() << endl;
       inventory.erase(inventory.begin()+i);
     }
   }
@@ -160,7 +130,6 @@ void Player::useItem(string name){
       lines.push_back(str + ";" + str2);
     }
     inFile.close();
-    string removeFile = "adventure3.txt";
     if(remove(currentFile.c_str()) != 0 )
       cerr << "failed to remove file" << removeFile << endl;
     ofstream outFile;
@@ -227,9 +196,6 @@ void Player::useItem(string name){
         if(currentRoom.isWinRoom()){
 
         }
-
-
-
 
     }*/
 
