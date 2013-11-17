@@ -3,8 +3,6 @@
 #include <sstream>
 using namespace std;
 
-
-
 int stringToInt(string str){
   stringstream ss;
   int x;

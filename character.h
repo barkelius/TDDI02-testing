@@ -22,7 +22,7 @@ class Character
 
 class Allied : public Character{
  public:
-    Allied();
+    Allied() = default;
     // Allied(string text_, string name_, int id_);
     Allied(string filePath, int roomId);
  private:

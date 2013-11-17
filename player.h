@@ -1,31 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "item.h"
+#include "room.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <iomanip>
 #include <string>
-#include <sstream>
 using namespace std;
-
-
-
-class Room{
-public:
-    Room(){
-        roomId = 0;
-    }
-    Room(int inputRoomId)
-        :   roomId(inputRoomId)
-    {}
-    void printRoom(){
-        cout << "roomId: " << roomId << endl;
-    }
-
-private:
-    int roomId;
-};
 
 class Player{
 public:
@@ -34,10 +16,10 @@ public:
   void useItem(string name);
 
 
-  //  void printInventory();
+  void printInventory();
   //  void pickUpItem(string name);
   //  void talk();
-  //  void walk(string direction);
+  void walk(string direction);
 
 private:
     Room currentRoom;
@@ -45,23 +27,10 @@ private:
     string currentFile;
 };
 
-
-/*
-    Player(const Player &other){
-        Item tmpItem;
-        for(unsigned i = 0; i < inventory.size(); ++i){
-            tmpItem.itemId = other.inventory[i].itemId;
-            tmpItem.itemName = other.inventory[i].itemName;
-            tmpItem.itemText = other.inventory[i].itemText;
-            inventory.push_back(tmpItem);
-        }
-    }*/
-
 Player::Player(string filePath){
   ifstream file;
   string x,y;
   int b;
-  stringstream ss;
   file.open(filePath.c_str());
   if(!file.is_open())
     cerr << "error: can't open file\n";
@@ -75,18 +44,18 @@ Player::Player(string filePath){
     Portable item = Portable(filePath,b);
     inventory.push_back(item);
   }
-  Room tmpRoom(b-80000);
+  Room tmpRoom(filePath,b-80000);
   currentRoom = tmpRoom;
   file.close();
   currentFile = filePath;
 }
 
 void Player::printPlayer(){
-  for(unsigned i = 0; i < inventory.size(); ++i){
+  /*  for(unsigned i = 0; i < inventory.size(); ++i){
     cout << "itemId: " << inventory[i].getId() << endl;
     cout << "itemName: " << inventory[i].getName() << endl;
     cout << "itemText: " << inventory[i].useItem() << endl;
-  }
+    }*/
   currentRoom.printRoom();
   }
 void Player::useItem(string name){
@@ -147,56 +116,67 @@ void Player::useItem(string name){
 
     }
     */
-/*
+
     void Player::printInventory(){
         for(unsigned i = 0; i < inventory.size(); ++i){
-            inventory[i].printItem();
+            inventory[i].printPortable();
         }
-    }*/
-/*
+    }
+
     void Player::walk(string direction){
-
-        if(currentRoom.doorDirection(direction) != 0){
-	    //<----otestat start------> KOMMER NOG INTE FUNGERA...
-    vector <string> lines;
-    int roomId = currentRoom.getRoomId();
-    ifstream inFile;
-    string str,str2;
-    int newRoomId = 1002, inventorySize = 0;
-    int lineToMove = -1;
-    inFile.open("adventure2.txt");
-    while(!inFile.eof()){
-      getline(inFile,str,';');
-      int x = stringToInt(str);
-      if(x == 80000+currentRoom.getRoomId())
-	lineToMove = lines.size();
-      else if(x >= 2000 && x < 3000 && lineToMove == -1)
-	++inventorySize;
-      getline(inFile,str2);
-      lines.push_back(str + ";" + str2);
+      if(currentRoom.doorDirection(direction) != 0){
+	//<----otestat start------> KOMMER NOG INTE FUNGERA...
+	vector <string> lines;
+	int roomId = currentRoom.getRoomId();
+	ifstream inFile;
+	string str,str2;
+	int newRoomId = currentRoom.doorDirection(direction), inventorySize = 0;
+	int lineToMove = -1;
+	inFile.open(currentFile.c_str());
+	while(!inFile.eof()){
+	  getline(inFile,str,';');
+	  int x = stringToInt(str);
+	  if(x == 80000+roomId)
+	    lineToMove = lines.size();
+	  else if(x >= 2000 && x < 3000 && lineToMove == -1)
+	    ++inventorySize;
+	  getline(inFile,str2);
+	  lines.push_back(str + ";" + str2);
+	}
+	inFile.close();
+	//lines.delete(lineToDelete);
+	if(remove(currentFile.c_str()) != 0 )
+	  cerr << "failed to remove file" << currentFile << endl;
+	ofstream outFile;
+	outFile.open(currentFile.c_str());
+	lines.insert(lines.begin()+inventorySize,intToString(80000+newRoomId) + ";¤");
+	lines.erase(lines.begin()+lineToMove+1);
+	for(int i = 0; i < lines.size(); ++i){  
+	  outFile << lines[i] << "\n";
+	}
+	//<----otestat end------>
+	
+	
+	Room tmpRoom(currentFile, currentRoom.doorDirection(direction));
+	currentRoom = tmpRoom;
+      }
+      /*  if(currentRoom.isWinRoom()){
+	  
+	  }*/
+      
     }
-    inFile.close();
-    //lines.delete(lineToDelete);
-    string removeFile = "adventure3.txt";
-    if(remove(removeFile.c_str()) != 0 )
-      cerr << "failed to remove file" << removeFile << endl;
-    ofstream outFile;
-    outFile.open("adventure3.txt");
-    lines.insert(lines.begin()+inventorySize,intToString(80000+tmpRoom.getRoomId()) + ";¤");
-    lines.erase(lines.begin()+lineToMove+1);
-    for(int i = 0; i < lines.size(); ++i){  
-      outFile << lines[i] << "\n";
-    }
-    //<----otestat end------>
 
 
-            Room tmpRoom(currentRoom.doorDirection(direction))
-            currentRoom = tmpRoom;
+/*
+    Player(const Player &other){
+        Item tmpItem;
+        for(unsigned i = 0; i < inventory.size(); ++i){
+            tmpItem.itemId = other.inventory[i].itemId;
+            tmpItem.itemName = other.inventory[i].itemName;
+            tmpItem.itemText = other.inventory[i].itemText;
+            inventory.push_back(tmpItem);
         }
-        if(currentRoom.isWinRoom()){
-
-        }
-
     }*/
+
 
 #endif
