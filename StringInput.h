@@ -16,7 +16,7 @@ public:
   ~StringInput();
 
   void handleInput();
-
+  string getStr();
   void showMessage();
   void clearString();
 };
@@ -38,6 +38,10 @@ StringInput::~StringInput(){
 void StringInput::clearString(){
   str= "";
   text = NULL;
+}
+
+string StringInput::getStr(){
+  return str;
 }
 
 void StringInput::handleInput(){
@@ -63,6 +67,11 @@ void StringInput::handleInput(){
       else if((event.key.keysym.unicode >=(Uint16)'a') && (event.key.keysym.unicode <= (Uint16)'z')){
 	str += (char)event.key.keysym.unicode;
       }
+
+      else if((event.key.keysym.unicode >=(Uint16)'!') && (event.key.keysym.unicode <= (Uint16)'?')){
+	str += (char)event.key.keysym.unicode;
+      }
+
     }
     
     // vid tryck på backspace när strängen inte är tom

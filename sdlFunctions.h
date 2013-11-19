@@ -35,6 +35,7 @@ bool init(){
     return false;
   }
   screen = SDL_SetVideoMode(width,height,bpp,SDL_SWSURFACE);
+
   if(screen == NULL){
     return false;
   }
@@ -51,7 +52,7 @@ bool init(){
 bool loadFiles(){
   background = IMG_Load("background_image_black.png");
 
-  font = TTF_OpenFont("data-latin.ttf", 28);
+  font = TTF_OpenFont("lazy.ttf", 28);
   
   if(background == NULL){
     return false;
