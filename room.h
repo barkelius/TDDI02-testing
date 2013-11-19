@@ -63,11 +63,14 @@ public:
 	    Portable item = Portable(filepath, b, id);
 	    itemList.push_back(item);
 	  }
-	  if(b < 4000 && b >= 3000){
+	  else if(b < 4000 && b >= 3000){
 	    Allied tmpNpc(filepath, id);
 	    alliedNpc = tmpNpc;
 	    break;
 	  }
+	  else if(b < 2000)
+	    break;
+	  getline(file,x);
 	}
       }
       else

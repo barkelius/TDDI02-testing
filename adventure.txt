@@ -1,3 +1,5 @@
+2006;Flojt;Den låter konstigt;
+2001;Banan;Mmmm,det smakade gott;
 2002;Hammare; Bank.. Bank.. inget hände;
 2003;Flöjt;Du blåser på den;
 2004;nyckel;unlocks stuff;
@@ -6,7 +8,6 @@
 1002;Köket;Det är fullt med disk som behöver diskas;0;0;0;1001;1;
 2008;Tallrik;Den ramlade ner på golvet och gick sönder;¤
 1001;Arvids rum;Det luktar Arvid, det står en “saxofon” lutad mot väggen;0;0;0;1002;0;
-2006;Flöjt;Den låter konstigt;
 2007;Äpple;Det var surt;
 3001;daniel;jag gillar Coca Cola;¤
 1003;Axels rum;asdasdasdasdasd;0;1001;1002;0;0;
@@ -20,6 +21,3 @@
 2009;hehehe;asdad;
 2009;hehehe;asdad;
 3002;a;b;¤
-;a;b;¤
-;a;b;¤
-;a;b;¤
