@@ -17,10 +17,12 @@ public:
 
 
   string printInventory();
-  void pickUpItem(string name);
+  string pickUpItem(string name);
   string talk();
   string walk(string direction);
-
+  string getRoomImage();
+  string getRoomDescription();
+  
 private:
     Room currentRoom;
     vector <Portable> inventory;
@@ -58,7 +60,6 @@ void Player::printPlayer(){
     }*/
   currentRoom.printRoom();
   }
-
 string Player::useItem(string name){
   string tmp;
   for(unsigned i = 0; i < inventory.size(); ++i){
@@ -75,7 +76,7 @@ string Player::talk(){
   string tmp;
   if(currentRoom.alliedNpc.getName() != ""){
     tmp = currentRoom.alliedNpc.getName() + ": " 
-      + currentRoom.alliedNpc.getText();
+	 + currentRoom.alliedNpc.getText();
   }
   else
     tmp = "No character in this room.";
@@ -83,64 +84,68 @@ string Player::talk(){
 }
 
 
-void Player::pickUpItem(string name){
+string Player::pickUpItem(string name){
   int itemId;
   for(unsigned i = 0; i < currentRoom.itemList.size(); ++i){
     if(currentRoom.itemList[i].getName() == name){
       inventory.push_back(currentRoom.itemList[i]);
       itemId = currentRoom.itemList[i].getId();
       currentRoom.itemList.erase(currentRoom.itemList.begin()+i);
+
+      //<----otestat start------> 
+      vector <string> lines;
+      ifstream inFile;
+      string str,str2;
+      //int itemId = 2007;
+      int lineToMove = 0;    
+      inFile.open(currentFile.c_str());
+      while(!inFile.eof()){
+	getline(inFile,str,';');
+	if(stringToInt(str) == itemId)
+	  lineToMove = lines.size();
+	getline(inFile,str2);
+	lines.push_back(str + ";" + str2);
+      }
+      inFile.close();
+      if(remove(currentFile.c_str()) != 0 )
+	cerr << "failed to remove file" << currentFile << endl;
+      ofstream outFile;
+      if(lines[lineToMove].at(lines[lineToMove].size()-1) == '¤')
+	lines[lineToMove].erase(lines[lineToMove].end()-1);
+      lines.insert(lines.begin(),lines[lineToMove]);
+      lines.erase(lines.begin()+lineToMove+1);
+      outFile.open(currentFile.c_str());
+      for(int i = 0; i < lines.size() -1; ++i){  
+	outFile << lines[i] << "\n";
+      }
+      outFile.close();
+      return "plockade upp" + name;
     }
   }
-  //<----otestat start------> 
-  vector <string> lines;
-  ifstream inFile;
-  string str,str2;
-  //int itemId = 2007;
-  int lineToMove = 0;    
-  inFile.open(currentFile.c_str());
-  while(!inFile.eof()){
-    getline(inFile,str,';');
-    if(stringToInt(str) == itemId)
-      lineToMove = lines.size();
-    getline(inFile,str2);
-    lines.push_back(str + ";" + str2);
-  }
-  inFile.close();
-  if(remove(currentFile.c_str()) != 0 )
-    cerr << "failed to remove file" << currentFile << endl;
-  ofstream outFile;
-  if(lines[lineToMove].at(lines[lineToMove].size()-1) == '¤')
-    lines[lineToMove].erase(lines[lineToMove].end()-1);
-  lines.insert(lines.begin(),lines[lineToMove]);
-  lines.erase(lines.begin()+lineToMove+1);
-  outFile.open(currentFile.c_str());
-  for(int i = 0; i < lines.size() -1; ++i){  
-    outFile << lines[i] << "\n";
-  }
-  outFile.close();
-  //<----otestat end------>
+  return "Det fanns inte";
+    //<----otestat end------>
 }
-
 
 string Player::printInventory(){
   string tmp = "";
   for(unsigned i = 0; i < inventory.size(); ++i){
     tmp +=inventory[i].getName();
-    for(int x = 0; x < 37-inventory[i].getName().size(); ++x)
+    for(int x = 0; x < 36-inventory[i].getName().size(); ++x)
       tmp += " ";
   }
   return tmp;
 }
 
 string Player::walk(string direction){
-  if(currentRoom.doorDirection(direction) != 0){
-    //<----otestat start------> KOMMER NOG INTE FUNGERA...
+  int newRoomId = currentRoom.doorDirection(direction);
+  Room tmpRoom(currentFile, newRoomId);
+  string returnString = "Fail";
+  if(newRoomId != 0){
     vector <string> lines;
     int roomId = currentRoom.getRoomId();
     ifstream inFile;
     string str,str2;
-    int newRoomId = currentRoom.doorDirection(direction), inventorySize = 0;
+    int inventorySize = 0;
     int lineToMove = -1;
     inFile.open(currentFile.c_str());
     while(!inFile.eof()){
@@ -154,39 +159,31 @@ string Player::walk(string direction){
       lines.push_back(str + ";" + str2);
     }
     inFile.close();
-    //lines.delete(lineToDelete);
     if(remove(currentFile.c_str()) != 0 )
       cerr << "failed to remove file" << currentFile << endl;
     ofstream outFile;
     outFile.open(currentFile.c_str());
     lines.insert(lines.begin()+inventorySize,intToString(80000+newRoomId) + ";¤");
-    lines.erase(lines.begin()+lineToMove);
-    for(int i = 0; i < lines.size(); ++i){  
+    lines.erase(lines.begin()+inventorySize+1);
+    for(int i = 0; i < lines.size() - 1; ++i){  
       outFile << lines[i] << "\n";
     }
-    //<----otestat end------>
-    
-    
-    Room tmpRoom(currentFile, currentRoom.doorDirection(direction));
     currentRoom = tmpRoom;
-    return currentRoom.room_description;
+    returnString = currentRoom.room_name + ", " + currentRoom.room_description;
   }
-  /*  if(currentRoom.isWinRoom()){
-         youWonThisGame();
-      }*/  
+  if(currentRoom.isWinRoom()){
+    return "YOU WON!";
+  }
+  return returnString;
 }
 
+string Player::getRoomImage(){
+  return currentRoom.room_image;
+}
+string Player::getRoomDescription(){
+  return currentRoom.room_description;
+}
 
-/*
-    Player(const Player &other){
-        Item tmpItem;
-        for(unsigned i = 0; i < inventory.size(); ++i){
-            tmpItem.itemId = other.inventory[i].itemId;
-            tmpItem.itemName = other.inventory[i].itemName;
-            tmpItem.itemText = other.inventory[i].itemText;
-            inventory.push_back(tmpItem);
-        }
-    }*/
 
 
 #endif
