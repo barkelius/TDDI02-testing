@@ -3,7 +3,7 @@
 2003;Flojt;Du blaser på den;
 2004;Nyckel;unlocks stuff;
 2005;Cola;daniels drog;
-81004;¤
+81001;¤
 1002;Daniels rum;Det ar fullt med disk som behover diskas;room2.png;1003;1003;1003;1003;0;
 2008;Tallrik;Den ramlade ner pa golvet och gick sonder;
 3001;Daniel;Jag gillar Coca Cola;¤
@@ -17,4 +17,3 @@
 1004;Gunnars rum;Sa har e det!;room4.png;1001;1001;1001;1001;0;
 2009;Mat;Tjockis;
 3004;Gunnar;Jag e biff;¤
-;Gunnar;Jag e biff;¤

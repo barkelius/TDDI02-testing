@@ -26,9 +26,9 @@ class Portable : public Item
  public:
   Portable();
   void printPortable(){
-    cout << "id = " << itemId << endl; 
-    cout << "name = " << Name << endl;
-    cout << "usageText = " << itemUsageText << endl;
+    cout << "itemId = " << itemId << endl; 
+    cout << "itemName = " << Name << endl;
+    cout << "itemUsageText = " << itemUsageText << endl;
   };
   
   Portable(string filepath, int itId, int roomId = 0)
