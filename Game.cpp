@@ -9,82 +9,101 @@
 #include "player.h"
 #include "character.h"
 
-SDL_Surface *roomImage = NULL;
-int game();
+using namespace std;
+int game(SDL_Surface *screen);
 
 int main(int argc, char* argv[]){
-  game();
+  SDL_Surface *screen = NULL;
+  game(screen);
 }
 
-int game(){
+int game(SDL_Surface *screen){
+  const int width = 1024;
+  const int height = 720;
+  const int bpp = 32;
+  SDL_Surface *background = NULL;
+  SDL_Surface *message = NULL;
+  SDL_Surface *message2 = NULL;
+  SDL_Surface *roomImage = NULL;
+
+  SDL_Event event;
+  SDL_Color textColor = {255, 255, 255};
+
+  TTF_Font *font = NULL;
   bool quit = false;
-  Player spelare("adventure.txt");
-  bool nameEntered = false;
-  Room rumm;
-  if(init() == false){
-    return 1;
-  }
+  Player spelare("adventure.txt"); 
 
+  SDL_Init(SDL_INIT_EVERYTHING);
+  TTF_Init(); 
+  SDL_WM_SetCaption("Adventure", NULL);
+
+  screen = SDL_SetVideoMode(width,height,bpp,SDL_SWSURFACE);
+  background = IMG_Load("background_image_black.png");
+  roomImage = IMG_Load(spelare.getRoomImage().c_str());
+  font = TTF_OpenFont("Blockstepped.ttf", 28);
+ 
   StringInput inputText;
+  string text; 
+  // string text3 = "random win win shit";
+  string roomDescriptionText  = "Description: " + spelare.getRoomDescription();
 
-  if(loadFiles() == false){
-    return 1;
-  }
-
-  string text;
-  string roomDescriptionText = "Description: " + spelare.getRoomDescription();
-  roomImage = IMG_Load("defaultRoomImage.png");
   while(quit == false){
     applySurface(0,0, background, screen);
-    applySurface(515,0, roomImage, screen);
-    printText(roomDescriptionText,10 , 10);
-    printText(text,10 , (roomDescriptionText.length()/36)*20 + 50);
+    applySurface(515,0, roomImage, screen); 
+    printText(roomDescriptionText,10 , 10,textColor,message,font,screen);
+    printText(text,10 , (roomDescriptionText.length()/36)*20 + 50,
+	      textColor,message,font,screen );
+    // printText(text3,10 , 400,textColor,message,font,screen);
     while(SDL_PollEvent(&event)){
-      // if(nameEntered == false){
-	inputText.handleInput();
-	if((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_RETURN)){
-	  //nameEntered = true;
-	  string tmp = inputText.getStr();
-	  int pos = tmp.find(" ");
-	  string cmd = tmp.substr(0,pos);
-	  string cmd2 = tmp.substr(pos+1,tmp.length());
-	  if(cmd == "Talk"){
-	    text = spelare.talk();
-	  }
-	  else if(cmd == "Use"){
-	    text = spelare.useItem(cmd2);
-	  }
-	  else if(cmd == "Inventory"){
-	    text = spelare.printInventory();
-	  }
-	  else if(cmd == "Walk"){
-	    roomDescriptionText = spelare.walk(cmd2);
-        roomImage = IMG_Load(spelare.getRoomImage().c_str());
-	  }
-	  else if(cmd == "Pickup"){
-        text = spelare.pickUpItem(cmd2);
-	  }
-      else{
-        text = "Unknown command";
+      
+      inputText.handleInput(event);
+    
+      if((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_RETURN)){
+
+	string tmp = inputText.getStr();
+	int pos = tmp.find(" ");
+	string cmd = tmp.substr(0,pos);
+	string cmd2 = tmp.substr(pos+1,tmp.length());
+
+	if(cmd == "Talk" || cmd == "talk"){      
+	  text = spelare.talk();
+	}
+	else if(cmd == "Use" || cmd == "use"){
+	  text = spelare.useItem(cmd2);
+	}
+	else if(cmd == "Inventory" || cmd == "inventory"){
+	  text = spelare.printInventory();
+	}
+	else if(cmd == "Walk" || cmd == "walk"){
+	  roomDescriptionText = spelare.walk(cmd2);
+	  roomImage = IMG_Load(spelare.getRoomImage().c_str());
+	}
+	else if(cmd == "Pickup" || cmd == "pickup"){
+	  text = spelare.pickUpItem(cmd2);
+	}
+	else{
+	    text = "Unknown command";
+	}
+	inputText.clearString();
+	SDL_FreeSurface(message);
+	
+      } 
+      if(event.type == SDL_QUIT){
+	
+	quit = true;
       }
-	  inputText.clearString();
-	  SDL_FreeSurface(message);
-
-	}
-	if(event.type == SDL_QUIT){
-	  quit = true;
-	}
+      
     }
 
-    inputText.showMessage();
-
-    if(SDL_Flip(screen) == -1){
-      return 1;
-    }
+    inputText.showMessage(screen);
+    
+    SDL_Flip(screen);
+     
+    
   }
-  cleanUp();
+  cleanUp(background,message,font);
 
   return 0;
 }
 
-//makeRoomDescriptionText(string description, string name)
+
