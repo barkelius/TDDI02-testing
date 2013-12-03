@@ -1,0 +1,229 @@
+//#include "player.h"
+//#include "room.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <iterator>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int stringToInt(string str){
+  stringstream ss;
+  int x;
+  ss << str;
+  ss >> x;
+  return x;
+}
+string intToString(int x){
+  stringstream ss;
+  ss << x;
+  string str = ss.str();
+  return str;
+}
+
+void roomToFile(string room, string filename);
+void itemToFile(string item, string filename);
+void characterToFile(string character, string filename);
+string MakeRoom();
+string MakeCharacter();
+string MakeItem();
+
+int main(){
+	string AdventureName;
+	string penis;
+	bool r;
+	cout << "nytt?????";
+	cin >> r;
+	if(r == true){
+	cout << "Name your adventure, using template \"Name.txt\" : ";
+	cin >> AdventureName;
+	ofstream outputFile;
+	outputFile.open(AdventureName.c_str());									//Fil skapad
+	if(!outputFile.is_open())
+      cerr << "error: can't open file\n";
+	outputFile.close();
+	}
+	else
+		cin >> AdventureName;
+	
+	cin.sync();
+	getline(cin,penis);
+	itemToFile(penis, AdventureName);
+
+	
+	 //if sats fÃ¶r room 
+	/*string apa = MakeRoom();
+	outputFile << apa;
+	apa = MakeItem();
+	outputFile << apa;
+	apa = MakeCharacter();
+	outputFile << apa;
+	*/
+	//if satser fÃ¶r char och item
+	
+}
+
+void itemToFile(string item, string filename){
+	ifstream file;
+	string in;
+	string tmp;
+	stringstream ss;
+	ofstream outputFile;
+	vector<string> temp;
+	file.open(filename.c_str());
+	if(!file.is_open())
+      cerr<< "error: can't open file\n";
+	while(!file.eof()){
+		getline(file, in);
+		temp.push_back(in);
+		cerr << in << "\n";
+	}
+	file.close();
+    if(remove(filename.c_str()) != 0 )
+		cerr << "failed to remove file";
+	for(int i = 0; i < temp.size(); i++)
+		cerr << temp.at(i) << "\n";
+	cerr << "1 \n";
+	if(item.at(0) == '0'){
+		ss << item;
+		getline(ss,tmp,';');
+		ss >> tmp;
+		//tmp = tmp + "\n";
+		temp.insert(temp.begin(), tmp);
+		cerr << "2 \n";
+	}
+	else{
+	  vector<string>::iterator it = temp.begin();
+		while(it != temp.end()){
+			cerr << "24 \n";
+			cerr << *it << "\n";
+			if(item.at(0) == (*it).at(0) && 
+			item.at(1) == (*it).at(1) && 
+			item.at(2) == (*it).at(2) && 
+			item.at(3) == (*it).at(3)){
+				cerr << "3 \n";
+				ss << item;
+				getline(ss,tmp,';');
+				getline(ss, tmp);
+				if((*it).at((*it).size() -1) == '¤'){
+				  (*it).erase((*it).size()-1);
+				  tmp = tmp + "¤";
+				}	
+				//tmp = tmp + "\n";
+				temp.insert(it, tmp);
+				swap(*it,*(it+1));
+				cerr << "4 \n";
+				//temp.erase(it+2);
+				break;
+			}
+			it++;
+		}
+	}
+	cerr << "detta skrivs inte ut";
+	outputFile.open(filename.c_str());
+	for(int i = 0; i < temp.size(); i++){
+		outputFile << temp.at(i);
+		if(i != temp.size() - 1){
+		  	outputFile << "\n";	
+		}
+		//outputFile << "\n";
+	}
+	outputFile.close();
+	file.close();
+
+
+}
+
+
+
+void characterToFile(string character, string filename){
+	ifstream file;
+	string in;
+	string tmp;
+	stringstream ss;
+	ofstream outputFile;
+	vector<string> temp;
+	file.open(filename.c_str());
+	if(!file.is_open())
+      cerr<< "error: can't open file\n";
+	while(!file.eof()){
+		getline(file, in);
+		temp.push_back(in);
+		cerr << in << "\n";
+	}
+	file.close();
+    if(remove(filename.c_str()) != 0 )
+		cerr << "failed to remove file";
+	for(int i = 0; i < temp.size(); i++)
+		cerr << temp.at(i) << "\n";
+	cerr << "1 \n";
+
+	  vector<string>::iterator it = temp.begin();
+		while(it != temp.end()){
+			cerr << "24 \n";
+			cerr << *it << "\n";
+			if(character.at(0) == (*it).at(0) && 
+			character.at(1) == (*it).at(1) && 
+			character.at(2) == (*it).at(2) && 
+			character.at(3) == (*it).at(3)){
+				cerr << "3 \n";
+				ss << character;
+				getline(ss,tmp,';');
+				getline(ss, tmp);
+				tmp = tmp + "¤";
+				while((*it).at((*it).size() -1) != '¤'){
+				  it++;
+				}
+				(*it).erase((*it).size()-1);	
+				temp.insert(it, tmp);
+				swap(*it,*(it+1));
+				cerr << "4 \n";
+				//temp.erase(it+2);
+				break;
+			}
+			it++;
+		}
+	cerr << "detta skrivs inte ut";
+	outputFile.open(filename.c_str());
+	for(int i = 0; i < temp.size(); i++){
+		outputFile << temp.at(i);
+		if(i != temp.size() - 1){
+		  outputFile << "\n";	
+		}
+		//outputFile << "\n";
+	}
+	outputFile.close();
+	file.close();
+
+
+}
+
+
+void roomToFile(string room, string filename){
+	ifstream file;
+	string in;
+	ofstream outputFile;
+	vector<string> temp;
+	file.open(filename.c_str());
+	if(!file.is_open())
+      cerr<< "error: can't open file\n";
+	while(!file.eof()){
+		getline(file, in);
+		temp.push_back(in);
+	}
+	temp.push_back(room);
+	outputFile.open(filename.c_str());
+	temp.erase(temp.begin()+temp.size()-2);
+	for(int i = 0; i < temp.size(); i++){
+		outputFile << temp.at(i);
+		if(i == temp.size() - 1){
+			outputFile << "¤";
+			//outputFile << "\n";	
+		}
+		outputFile << "\n";
+	}
+	outputFile.close();
+	file.close();
+}
