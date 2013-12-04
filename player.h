@@ -16,7 +16,8 @@ public:
   std::string walk(std::string direction);
   std::string getRoomImage();
   std::string getRoomDescription();
-  
+  std::string getRoomName();
+  std::string helpFunction();
 private:
     Room currentRoom;
     std::vector <Portable> inventory;

@@ -15,7 +15,7 @@ Player::Player(string filePath){
   int b;
   file.open(filePath.c_str());
   if(!file.is_open())
-    cerr << "error: can't open file\n";
+    cerr << "error: can't open file: "<< filePath << "\n" ;
   while(!file.eof()){
     getline(file,x,';');
     b = stringToInt(x);
@@ -39,7 +39,8 @@ void Player::printPlayer(){
     cout << "itemText: " << inventory[i].useItem() << endl;
     }*/
   currentRoom.printRoom();
-  }
+}
+
 string Player::useItem(string name){
   string tmp;
   for(unsigned i = 0; i < inventory.size(); ++i){
@@ -55,7 +56,7 @@ string Player::useItem(string name){
 string Player::talk(){
   string tmp;
   if(currentRoom.alliedNpc.getName() != ""){
-    tmp = currentRoom.alliedNpc.getName() + ": " 
+    tmp = currentRoom.alliedNpc.getName() + ": "
 	 + currentRoom.alliedNpc.getText();
   }
   else
@@ -72,12 +73,12 @@ string Player::pickUpItem(string name){
       itemId = currentRoom.itemList[i].getId();
       currentRoom.itemList.erase(currentRoom.itemList.begin()+i);
 
-      //<----otestat start------> 
+      //<----otestat start------>
       vector <string> lines;
       ifstream inFile;
       string str,str2;
       //int itemId = 2007;
-      int lineToMove = 0;    
+      int lineToMove = 0;
       inFile.open(currentFile.c_str());
       while(!inFile.eof()){
 	getline(inFile,str,';');
@@ -95,7 +96,7 @@ string Player::pickUpItem(string name){
       lines.insert(lines.begin(),lines[lineToMove]);
       lines.erase(lines.begin()+lineToMove+1);
       outFile.open(currentFile.c_str());
-      for(int i = 0; i < lines.size() -1; ++i){  
+      for(int i = 0; i < lines.size() -1; ++i){
 	outFile << lines[i] << "\n";
       }
       outFile.close();
@@ -145,11 +146,15 @@ string Player::walk(string direction){
     outFile.open(currentFile.c_str());
     lines.insert(lines.begin()+inventorySize,intToString(80000+newRoomId) + ";¤");
     lines.erase(lines.begin()+inventorySize+1);
-    for(int i = 0; i < lines.size() - 1; ++i){  
+    for(int i = 0; i < lines.size() - 1; ++i){
       outFile << lines[i] << "\n";
     }
     currentRoom = tmpRoom;
-    returnString = currentRoom.room_name + ", " + currentRoom.room_description;
+    returnString = "Room: " + currentRoom.room_name;
+    for(int x = 0; x < 36-returnString.size(); ++x){
+        returnString += " ";
+    }
+    returnString += "Description: " + currentRoom.room_description;
   }
   if(currentRoom.isWinRoom()){
     return "YOU WON!";
@@ -162,4 +167,19 @@ string Player::getRoomImage(){
 }
 string Player::getRoomDescription(){
   return currentRoom.room_description;
+}
+string Player::getRoomName(){
+  return currentRoom.room_name;
+}
+
+string Player::helpFunction(){
+  string returnString = "Commands in this room:               ";
+  returnString += "'Walk <direction>', 'Inventory'";
+  if(currentRoom.alliedNpc.getName() != "")
+    returnString += " ,'Talk <text>'";
+  if(currentRoom.itemList.size() != 0)
+    returnString += " ,'Pickup <itemname>'";
+  if(inventory.size() != 0)
+     returnString += " ,'Use <itemname>'";
+  return returnString;
 }

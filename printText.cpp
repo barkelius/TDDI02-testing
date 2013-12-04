@@ -9,7 +9,7 @@
 using namespace std;
 
 void printText(string text, int x, int y, SDL_Color textColor,SDL_Surface* message,TTF_Font* font,SDL_Surface* screen){
-  
+
   vector<string> lines;
   string temp;
   while(text.length() > 37){
@@ -19,12 +19,12 @@ void printText(string text, int x, int y, SDL_Color textColor,SDL_Surface* messa
     lines.push_back(text);;
     text = temp;
   }
-  
+
   lines.push_back(text);
-  
+
   for(int i = 0; i < lines.size(); ++i){
     message = TTF_RenderText_Solid(font,lines[i].c_str(),textColor);
-    applySurface(x,(y+(i *20)), message, screen);
+    applySurface(x,(y+(i *28)), message, screen);
   }
- 
+
 }

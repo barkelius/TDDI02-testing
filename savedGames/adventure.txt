@@ -1,0 +1,18 @@
+2009;Mat;Tjockis;
+2008;Tallrik;Den ramlade ner pa golvet och gick sonder;
+2001;Banan;Mmmm,det smakade gott;
+2002;Hammare; Bank.. Bank.. inget hände;
+2003;Flojt;Du blaser på den;
+2004;Nyckel;unlocks stuff;
+2005;Cola;daniels drog;
+81003;¤
+1002;Daniels rum;Det ar fullt med disk som behover diskas;room2.png;1003;1003;1003;1003;0;
+3001;Daniel;Jag gillar Coca Cola;¤
+1001;Arvids rum;Det luktar Arvid, det star en “saxofon” lutad mot vaggen;room1.png;1002;1002;1002;1002;0;
+2006;Flojt2;Den later konstigt;
+2007;Apple;Det var surt;
+3002;Arvid;Jag kopierar kod;¤
+1003;Axels rum;Swag;room3.png;1004;1004;1004;1004;0;
+2009;Vattenflaska;Fylld med vatten;
+3003;Axel;#YOLO;¤
+1004;Gunnars rum;Sa har e det!;room4.png;1001;1001;1001;1001;0;
