@@ -13,7 +13,7 @@ public:
   
   void handleInput(SDL_Event event);
   std::string getStr();
-  void showMessage(SDL_Surface *screen);
+  void showMessage(SDL_Surface *screen, int x, int y);
   void clearString();
 private:
   std::string str;

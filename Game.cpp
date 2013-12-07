@@ -25,8 +25,8 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 
   TTF_Font *font = NULL;
   bool quit = false;
-  Player spelare("savedGames//" + fileName);
-
+  Player spelare(fileName);
+  spelare.moveFile();
 
   background = IMG_Load("background_image_black.png");
   roomImage = IMG_Load(spelare.getRoomImage().c_str());
@@ -69,7 +69,7 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 	}
 	else if(cmd == "Walk" || cmd == "walk"){
 	  roomDescriptionText = spelare.walk(cmd2);
-      text3 = "";
+	  text3 = "";
 	  roomImage = IMG_Load(spelare.getRoomImage().c_str());
 	}
 	else if(cmd == "Pickup" || cmd == "pickup"){
@@ -93,7 +93,7 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 	    return 0;
 	  }
 	  else if((mx > 610) && (mx < 935) && (my > 383) && (my < 447)){
-        text3 = spelare.helpFunction();
+	    text3 = spelare.helpFunction();
 	  }
 	}
       }
@@ -102,7 +102,7 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 
     }
 
-    inputText.showMessage(screen);
+    inputText.showMessage(screen,10,675);
 
     SDL_Flip(screen);
 

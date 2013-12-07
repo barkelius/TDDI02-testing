@@ -15,7 +15,7 @@ Player::Player(string filePath){
   int b;
   file.open(filePath.c_str());
   if(!file.is_open())
-    cerr << "error: can't open file: "<< filePath << "\n" ;
+    cerr << "error: can't open file: ."<< filePath << ".\n" ;
   while(!file.eof()){
     getline(file,x,';');
     b = stringToInt(x);
@@ -29,6 +29,7 @@ Player::Player(string filePath){
   Room tmpRoom(filePath,b-80000);
   currentRoom = tmpRoom;
   file.close();
+  
   currentFile = filePath;
 }
 
@@ -183,3 +184,29 @@ string Player::helpFunction(){
      returnString += " ,'Use <itemname>'";
   return returnString;
 }
+
+void Player::moveFile(){
+  string tmp, fileName;
+  int pos = currentFile.find("/");
+  tmp = currentFile.substr(0,pos);
+  cout << tmp << endl;
+  fileName = currentFile.substr(pos+2,currentFile.length());
+  //cout << currentFile << endl;
+  if(tmp == "Adventures"){
+    vector <string> lines;
+    ifstream inFile;
+    string str;
+    inFile.open(currentFile.c_str());
+    while(!inFile.eof()){
+      getline(inFile,str);
+      lines.push_back(str);
+    }
+    inFile.close();
+    ofstream outFile;
+    outFile.open("Saved games//" + fileName);
+    for(int i = 0; i < lines.size() - 1; ++i){
+      outFile << lines[i] << "\n";
+    }
+  }
+}
+

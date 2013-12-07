@@ -73,8 +73,8 @@ void StringInput::handleInput(SDL_Event event){
 }
 
 
-void StringInput:: showMessage(SDL_Surface *screen){
+void StringInput:: showMessage(SDL_Surface *screen, int x, int y){
   if(text != NULL){
-    applySurface(10,675, text, screen);
+    applySurface(x,y, text, screen);
   }
 }

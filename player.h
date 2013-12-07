@@ -18,6 +18,7 @@ public:
   std::string getRoomDescription();
   std::string getRoomName();
   std::string helpFunction();
+  void moveFile();
 private:
     Room currentRoom;
     std::vector <Portable> inventory;
