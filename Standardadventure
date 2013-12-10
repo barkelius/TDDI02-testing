@@ -1,0 +1,40 @@
+2000;Old looking Key; This might come in handy later on, so i better just putt it somewhere safe for now;
+81001;¤
+1001;In the car;After finding out that your great grandfather had a secret treasure in his house you've decided to go search for it in the family mansion. (leave vehicle to the east);car.png;0;0;1002;0;0;¤
+1002;At the gate;As the gate opens you see the mansion from afar and remember that your grandfather was a very wealthy man and start to think that this treasure might be bigger than you thought. On the curb you see something that resembles a fruit. (the gate is to the north and the car is to the south);1003;1001;0;0;0;
+2001;Rotten fruit;Your stomach turns inside-out and you start to puke;¤
+1003;The Garden;To the west is the big house that reminds you of your childhood and to the east there is a gardenshed. When you look around you see gravel on the walkway and some branches laying on the grass and in front off you there is a little kid smiling at you for some reason, try asking her what she's smiling about.;Garden.png;0;1003;1004;1005;0;
+2002;Gravel;You let the gravel fall to the ground and you think about the beach.;
+2003;Branch;You swing it around, it makes that "swooshing" sound.;¤
+3001;Sabrina;Hi, we heard you were coming and started playing hide and seek. Try to find the 5 others, someone might be in the gardenshed;¤
+1004;The Gardenshed;In the north of the gardenshed you see a small hole in the ground besides the hole you see a blue plant, a green plant, an orchid, some gardening gloves and a shovel.;Gardenshed.png;1104;1004;0;0;0;
+2004;Blue plant;This looks exotic;
+2005;Green plant;This plants colour represent the health of the environment...;
+2006;Orchid;Big leafs means big... roots;
+2007;Gardening gloves;When you put them on you feel absolutely fabulous;¤
+1104;The hole in the garden shed;You see a child, he says that he was number 1, try asking him for hints about where the others might be;hole.png;0;1004;0;0;0;
+3002;George;I dont know where the others are, all i know is that Henrietta likes outdoor clothing very much.;¤
+1005;The hall;To the west you see a bunch of clothes hangers and you think you hear some giggles behind them. To the north the hallway keeps going and to the east there is a staircase. On the floor there is a lonesome shoe and cane standing next to the door.;hall.png;1006;1003;1007;1105;0;
+2008;Shoe;This is almost as lonesome as a wolfs cry in the night;
+2009;Cane;This cane looks like its made of ivory;¤
+1105;Clothes hanger;You see a child hiding behind the clothes, you ask "Are you number 2 Henrietta?".;clothes.png;0;1005;0;0;0;
+3003;Henrietta;How did you know i was here ? Did the smelly William from down the hallway tell you?;¤
+1006;Hallway;There is something slimy hanging from the painting on the east wall. You see the living room to the west and you see the kitchen to the north;hallway.png;1008;1005;0;1009;0;
+2009;Slime;Uck, this is disgusting;¤
+1008;Kitchen;To the east there is a breakfast table with a basket of bread and a window that goes to the garden, to the north there is a door leading to the garbage room and between the door and the window is the sink and the refrigerator. On the east wall is a calender that says june the 17th;kitchen.jpg;1108;1006;0;0;0;
+2010;Breadbasket;Theese bread smells like its freshly made just for your visit;¤
+1108;Garbage room;There is a foul smell eering all around and in the midst of it att stands a boy say "hi, you found me and i have number 3";garbage.jpg;0;1008;0;0;0;
+3004;William;My best friend is thoedore, i like watching movies with him in his room.;¤
+1007;Second floor hallway;You see a spacius hallway with a lots of closed doors that you guess goes to all of the childrens rooms, but there is some sound comming from the last door on the west side of the hall;Secondfloor.jpg;0;1005;0;1107;0;¤
+1107;Theodores room;You walk in on thoedore watching a scene from Indiana Jones where he goes through a hidden passage in some old ruins;
+3005;Theodore;Hello, i am number four. If your looking for Annie she is probably just reading down in the living room;¤
+1009;Living room;To the west there is a big empty bookshelf with some boooks lying in front of it and to the north there is a big fire place with furniture infront of it. On the east side of the room there is a big couch and a 40-inch flatscreen-HD tv that is turned off.;livingroom.jpg;0;1006;0;1109;0;
+2011;Book;This is "Charlie and the chocolate factory";
+2012;Book;This is "Oliver twist";
+2013;Book;This is acually just some blueprint of a hidden passage next to as fire place;
+2015;Book;This is a letter that says "I have succesfully built a secret passage behind my bookshelf, i better keep it empty so it will be easier to spinn";¤
+1109;Hidden passage;There is a girl reading a book sitting on the couch next to the east wall and a door in leading to the north with light shining through the door;
+3006;Annie;Congratulations you've found all of us. That door have been always been looked because none of us have had the key, but you do so lets see whats in there!!;¤
+1111;Treasure;As you walk into the room the door shuts behind you and in the room you see pictures of all the people that used to live here when your grandfather lived and in the middle of the room there stands a open chest full of money. To the north there is bright light coming in through a door leading outside.Treasureroom.jpg;1999;0;0;0;0;
+2014;Treasure chest;The whole thing apears to be full of guld coins so it must be worth alot, it is very heavy;¤
+1999;;;;0;0;0;0;1;
