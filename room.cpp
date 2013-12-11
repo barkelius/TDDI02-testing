@@ -16,9 +16,6 @@ void Room::printRoom(){
     cout << "roomDescription = " << room_description << endl;
     cout << "room_image =" << room_image << endl;
     cout << "isWinRoom = " << winRoom << endl;
-    /*    for(int i = 0; i < door_ids.size(); i++)
-      cout << door_ids.at(i).first << ": " 
-      << door_ids.at(i).second << endl;*/
     cout << "west=" << west << ", east=" << east << ", north=" << north 
 	 << ", south=" << south << endl;
 

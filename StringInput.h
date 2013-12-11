@@ -11,7 +11,7 @@ public:
   StringInput();
   ~StringInput();
   
-  void handleInput(SDL_Event event);
+  void handleInput(SDL_Event event, int textLength);
   std::string getStr();
   void showMessage(SDL_Surface *screen, int x, int y);
   void clearString();
@@ -20,7 +20,7 @@ private:
   SDL_Surface *text;
 
   SDL_Color textColor = {255, 255, 255};
-  TTF_Font *font = TTF_OpenFont("Blockstepped.ttf", 28);
+  TTF_Font *font = TTF_OpenFont("arial.ttf", 28);
 };
 
 

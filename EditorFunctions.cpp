@@ -25,6 +25,7 @@ string intToString(int x){
   return str;
 }*/
 
+string removeIdFromString(string str);
 //Returnerar true om allt gick bra, false om inmatningen från användaren var felaktig.
 bool roomToFile(string room, string defaultimage, string filename);
 bool itemToFile(string item, string filename);
@@ -75,6 +76,7 @@ void setCurrentRoom(string filename);
 }*/
 
 bool itemToFile(string item, string filename){
+  cout << item << endl;
   ifstream file;
   int check = 0;
   string in;
@@ -103,46 +105,52 @@ bool itemToFile(string item, string filename){
       return false;
     }
   }
+ cout << item << endl;
   if(check != 4){                   
     return false;
   }
-  file.open(filename.c_str());
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                     //Läser in alla rader från filen till vector 
     getline(file, in);
     temp.push_back(in);
   }
+  cout << "swag: " << item << endl;
   file.close();
   vector<string>::iterator it = temp.begin();
+
   while(it != temp.end()-1){                             //Kolla om id är upptaget
-    if(item.at(5) == (*it).at(0) && 
-       item.at(6) == (*it).at(1) && 
-       item.at(7) == (*it).at(2) && 
-       item.at(8) == (*it).at(3)){
-      return false;
-    }
+    if((*it).size() > 3){
+      if(item.at(5) == (*it).at(0) && 
+	 item.at(6) == (*it).at(1) && 
+	 item.at(7) == (*it).at(2) && 
+	 item.at(8) == (*it).at(3)){
+	return false;
+      }
+    }    
     ++it;
   }
-
-  if(remove(filename.c_str()) != 0 )                         //tar bort filen
+  cout << "swag2: " << item << endl;
+  ss.sync();
+  if(remove(("Adventures//" + filename).c_str()) != 0 )                         //tar bort filen
     cerr << "failed to remove file";
-  if(item.at(0) == '0'){                                    //kollar om item ska hamna hos player inventory eller i ett rum
-    ss << item;
-    getline(ss,tmp,';');
-    ss >> tmp;
+  if(item.at(0) == '0'){ //kollar om item ska hamna hos player inventory eller i ett rum
+    cerr << "swagettw" << endl;
+    tmp = removeIdFromString(item);
+    cerr << "swagetti yolonesis" << tmp << endl;
     temp.insert(temp.begin(), tmp);
   }
   else{
+     cerr << item << endl;
     it = temp.begin();
     while(it != temp.end()){
       if(item.at(0) == (*it).at(0) && 
 	 item.at(1) == (*it).at(1) && 
 	 item.at(2) == (*it).at(2) && 
-	 item.at(3) == (*it).at(3)){                      //letar igenom till rätt rum hittas
-	ss << item;
-	getline(ss,tmp,';');
-	getline(ss, tmp);
+	 item.at(3) == (*it).at(3)){              //letar igenom till rätt rum hittas
+	tmp = removeIdFromString(item);	
+	cerr << tmp << endl;
 	if((*it).at((*it).size() -1) == '¤'){           //stegar tills slutet av rummet hittas och sätter in npc sist i rummet
 	  (*it).erase((*it).size()-1);
 	  tmp = tmp + "¤";
@@ -154,7 +162,9 @@ bool itemToFile(string item, string filename){
       it++;
     }
   }
-  outputFile.open(filename.c_str());
+  outputFile.open("Adventures//" + filename);
+  if(!outputFile.is_open())
+    cout << "tchjäääna";
   for(int i = 0; i < temp.size(); i++){                //skriver allt till filen med radbrytning
     outputFile << temp.at(i);
     if(i != temp.size() - 1){
@@ -165,6 +175,15 @@ bool itemToFile(string item, string filename){
   file.close();
   return true;
 
+}
+
+string removeIdFromString(string str){
+  int x = 0;
+  while(str.at(x) != ';'){
+    ++x;
+  }
+  str.erase(0,x+1);
+  return str;
 }
 
 
@@ -199,7 +218,8 @@ bool characterToFile(string character, string filename){
   if(check != 4){                                            // kollar att antalet semikolon är korrekt
     return false;
   }
-  file.open(filename.c_str());
+  cout<<filename<< endl;
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                       //Läser in rad för rad från filen till en vector
@@ -233,7 +253,7 @@ bool characterToFile(string character, string filename){
     }
     ++it;
   }
-  if(remove(filename.c_str()) != 0 )
+  if(remove(("Adventures//" + filename).c_str()) != 0 )
     cerr << "failed to remove file";
 
   it = temp.begin();
@@ -242,9 +262,10 @@ bool characterToFile(string character, string filename){
        character.at(1) == (*it).at(1) && 
        character.at(2) == (*it).at(2) && 
        character.at(3) == (*it).at(3)){                //Letar efter rätt rum
-      ss << character;
+      /* ss << character;
       getline(ss,tmp,';');
-      getline(ss, tmp);
+      getline(ss, tmp);*/
+      tmp = removeIdFromString(character);
       tmp = tmp + "¤";
       while((*it).at((*it).size() -1) != '¤'){         //stegar till slutet av rummet
 	it++;
@@ -256,7 +277,7 @@ bool characterToFile(string character, string filename){
     }
     it++;
   }
-  outputFile.open(filename.c_str());
+  outputFile.open(("Adventures//" + filename).c_str());
   for(int i = 0; i < temp.size(); i++){             //Skriver allt till filen
     outputFile << temp.at(i);
     if(i != temp.size() - 1){
@@ -277,6 +298,7 @@ bool roomToFile(string room, string defaultimage, string filename){
   ofstream outputFile;
   vector<string> temp;
   SDL_Surface *image = NULL;
+  cout << "fil: " << filename << endl;
   if(room.size() < 18)                               //kollar ett minimum för inmatningsstorleken
     return false;
   for(int i = 0; i < room.size(); i++){              // stegar varje semikolon
@@ -322,7 +344,7 @@ bool roomToFile(string room, string defaultimage, string filename){
   }
   tmp += in + ";";
   room = tmp;
-  file.open(filename.c_str());
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                     //fil till vector
@@ -330,7 +352,7 @@ bool roomToFile(string room, string defaultimage, string filename){
     temp.push_back(in);
   }
   temp.push_back(room);                                          // rum sist i vector
-  outputFile.open(filename.c_str());
+  outputFile.open(("Adventures//" + filename).c_str());
   temp.erase(temp.begin()+temp.size()-2);                       //tar bort blank rad
   for(int i = 0; i < temp.size(); i++){                         //Skriver allt till fil och slutar med en sol bakom det nya rummet
     outputFile << temp.at(i);
@@ -353,7 +375,7 @@ bool deleteRoom(string room, string filename){
   vector<string> temp;
   if(room.size() != 4)                                   //minimum för inmatning
     return false;
-  file.open(filename.c_str());
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                  // fil till vector
@@ -371,7 +393,7 @@ bool deleteRoom(string room, string filename){
     if(it == temp.end() - 1)
       return false;
   }
-  if(remove(filename.c_str()) != 0 )
+  if(remove(("Adventures//" + filename).c_str()) != 0 )
     cerr << "failed to remove file";
 
   it = temp.begin();
@@ -389,7 +411,7 @@ bool deleteRoom(string room, string filename){
     }
     ++it;
   }
-  outputFile.open(filename.c_str());
+  outputFile.open(("Adventures//" + filename).c_str());
   for(int i = 0; i < temp.size(); i++){                    //vector till fil
     outputFile << temp.at(i);
     outputFile << "\n";
@@ -407,7 +429,7 @@ bool deleteCharacter(string character, string filename){
   vector<string> temp;
   if(character.size() != 4)                                 //kollar inmatningstorlek
     return false;
-  file.open(filename.c_str());
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                       //fil till vector
@@ -425,7 +447,7 @@ bool deleteCharacter(string character, string filename){
     if(it == temp.end() - 1)
       return false;
   }
-  if(remove(filename.c_str()) != 0 )                       //raderar fil för att göra det möjligt för omstrukturering
+  if(remove(("Adventures//" + filename).c_str()) != 0 )                       //raderar fil för att göra det möjligt för omstrukturering
     cerr << "failed to remove file";
 
   it = temp.begin();
@@ -441,7 +463,7 @@ bool deleteCharacter(string character, string filename){
     }
     ++it;
   }
-  outputFile.open(filename.c_str());
+  outputFile.open(("Adventures//" + filename).c_str());
   for(int i = 0; i < temp.size(); i++){                       // vector till fil
     outputFile << temp.at(i);
     outputFile << "\n";
@@ -460,7 +482,7 @@ bool deleteItem(string item, string filename){
   vector<string> temp;
   if(item.size() != 4)                                  //imantingstorlek ok?
     return false;
-  file.open(filename.c_str());
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                  // fil till vector
@@ -478,7 +500,7 @@ bool deleteItem(string item, string filename){
     if(it == temp.end() - 1)
       return false;
   }
-  if(remove(filename.c_str()) != 0 )                 // raderar fil för att göra det möjligt för omstrukturering
+  if(remove(("Adventures//" + filename).c_str()) != 0 )                 // raderar fil för att göra det möjligt för omstrukturering
     cerr << "failed to remove file";
 
   it = temp.begin();
@@ -499,7 +521,7 @@ bool deleteItem(string item, string filename){
     }
     ++it;
   }
-  outputFile.open(filename.c_str());
+  outputFile.open(("Adventures//" + filename).c_str());
   for(int i = 0; i < temp.size(); i++){              //vector till fil
     outputFile << temp.at(i);
     outputFile << "\n";
@@ -517,7 +539,7 @@ void setCurrentRoom(string filename){
   string eight = "8";
   stringstream ss;
   string in;
-  file.open(filename.c_str());
+  file.open(("Adventures//" + filename).c_str());
   if(!file.is_open())
     cerr<< "error: can't open file\n";
   while(!file.eof()){                                       //fil till vector
@@ -549,7 +571,7 @@ void setCurrentRoom(string filename){
       break;
     }
   }
-  outputFile.open(filename.c_str());
+  outputFile.open(("Adventures//" + filename).c_str());
   for(int i = 0; i < temp.size(); i++){                      // vector till fil
     outputFile << temp.at(i);
     outputFile << "\n";

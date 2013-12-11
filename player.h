@@ -19,10 +19,12 @@ public:
   std::string getRoomName();
   std::string helpFunction();
   void moveFile();
+  bool isGameOver();
 private:
     Room currentRoom;
     std::vector <Portable> inventory;
     std::string currentFile;
+    std::string defaultAdventureImage;
 };
 
 

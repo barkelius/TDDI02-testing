@@ -9,6 +9,7 @@
 #include "player.h"
 #include "character.h"
 #include "Game.h"
+#include <iostream>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
   SDL_Surface *roomImage = NULL;
   int mx = 0;
   int my = 0;
-
+  int textLength = 36;
   SDL_Color textColor = {255, 255, 255};
 
   TTF_Font *font = NULL;
@@ -30,7 +31,7 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 
   background = IMG_Load("background_image_black.png");
   roomImage = IMG_Load(spelare.getRoomImage().c_str());
-  font = TTF_OpenFont("Blockstepped.ttf", 28);
+  font = TTF_OpenFont("arial.ttf", 28);
 
   StringInput inputText;
   string text;
@@ -44,12 +45,14 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
     applySurface(0,0, background, screen);
     applySurface(515,0, roomImage, screen);
     printText(roomDescriptionText,10 , 10,textColor,message,font,screen);
-    printText(text,10 , (roomDescriptionText.length()/36)*20 + 50,
+    printText(text,10 , (roomDescriptionText.length()/36)*28 + 50,
 	      textColor,message,font,screen );
-    printText(text3, 10, 400,textColor,message,font,screen);
+
+    printText(text3, 10, ((text.length() + roomDescriptionText.length())/36)*28 + 50,textColor,message,font,screen);
+
     while(SDL_PollEvent(&event)){
 
-      inputText.handleInput(event);
+      inputText.handleInput(event,textLength);
 
       if((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_RETURN)){
 
@@ -71,6 +74,10 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 	  roomDescriptionText = spelare.walk(cmd2);
 	  text3 = "";
 	  roomImage = IMG_Load(spelare.getRoomImage().c_str());
+	  //if(roomImage == NULL){
+       // roomImage = IMG_Load(spelare.getDefaultImage().c_str());
+	  //}
+	  text  = "";
 	}
 	else if(cmd == "Pickup" || cmd == "pickup"){
 	  text = spelare.pickUpItem(cmd2);
@@ -82,19 +89,34 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 	SDL_FreeSurface(message);
 
       }
-    if(event.type == SDL_QUIT){
-	  return 0;
-    }
+      if(spelare.isGameOver()){
+	text = "";
+	roomDescriptionText = "";
+	text3 ="";
+	background = IMG_Load("gameOver.png");
+	//return 5;
+	roomImage = NULL;
+	if(event.type == SDL_QUIT){
+	  return 5;
+	}
+      }
+
+      if(event.type == SDL_QUIT){
+	return 0;
+      }
       if(event.type == SDL_MOUSEBUTTONDOWN){
 	if( event.button.button == SDL_BUTTON_LEFT ){
 	  mx = event.button.x;
 	  my = event.button.y;
 	  if((mx > 610) && (mx < 935) && (my > 632) && (my < 700)){
-	    return 0;
+	    return 4;
 	  }
 	  else if((mx > 610) && (mx < 935) && (my > 383) && (my < 447)){
 	    text3 = spelare.helpFunction();
 	  }
+      else if((mx > 610) && (mx < 935) && (my > 507) && (my < 571)){
+        text = spelare.printInventory();
+      }
 	}
       }
 
@@ -106,7 +128,8 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 
     SDL_Flip(screen);
 
-
+    //cout << "isWinRoom" << spelare.isGameOver() << endl;
+    //spelare.printPlayer();
   }
 
   cleanUp(background,message,font);

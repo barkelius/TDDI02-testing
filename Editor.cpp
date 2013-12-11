@@ -10,6 +10,7 @@
 #include "player.h"
 #include "character.h"
 #include "Editor.h"
+#include <iostream>
 
 
 using namespace std;
@@ -27,13 +28,14 @@ int editor(SDL_Surface *screen, SDL_Event event, string fileName, string imagePa
 
   TTF_Font *font = NULL;
   bool quit = false;
-  
 
 
-  background = IMG_Load("background_image_black.png");
+
+  background = IMG_Load("editorBackgroundImage.png");
   // roomImage = IMG_Load(spelare.getRoomImage().c_str());
-  font = TTF_OpenFont("Blockstepped.ttf", 28);
+  font = TTF_OpenFont("arial.ttf", 28);
   int ifStatementToUse = 0;
+  int textLength = 330;
   StringInput inputText;
   string text;
   string text3 = "";
@@ -51,10 +53,10 @@ int editor(SDL_Surface *screen, SDL_Event event, string fileName, string imagePa
     // printText(text,10 , (roomDescriptionText.length()/36)*20 + 50,
     //	      textColor,message,font,screen );
     printText(whatToType,10 , 10,textColor,message,font,screen);
-    printText(text, 10, 200,textColor,message,font,screen);
+    printText(text, 10, (whatToType.length()/36)*28 + 50,textColor,message,font,screen);
     while(SDL_PollEvent(&event)){
 
-      inputText.handleInput(event);
+      inputText.handleInput(event,textLength);
 
       if((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_RETURN)){
 
@@ -64,19 +66,38 @@ int editor(SDL_Surface *screen, SDL_Event event, string fileName, string imagePa
 	//string cmd2 = tmp.substr(pos,tmp.length());
 
 	if(cmd == "Makeroom" || cmd == "makeroom"){
-	  whatToType = "Type Id;Name;Description;ImagePath; DoorId;DoorId;DoorId;DoorId;winRoom;";
-	  ifStatementToUse = 1;		
+	  whatToType = "Type Id;Name;Description;ImagePath; DoorId;DoorId;DoorId;DoorId;winRoom;  Press help for further explanations";
+	  cout<<"Fil namn:"<< fileName<< endl;
+	  ifStatementToUse = 1;
 	}
 	else if(ifStatementToUse == 1){
-	  roomToFile(cmd, imagePath, fileName);
+	  if(roomToFile(cmd, imagePath, fileName) == false)
+	    whatToType = "Wrong input format";
+	  else
+	    whatToType = "Creation successful";
 	  ifStatementToUse = 0;
 	}
-	/*else if((cmd == "Make" || cmd == "make") && (cmd2 == "Character" || cmd2 == "character")){
-	  whatToType = "Type roomId;characterId;Name;Text;";
-	  ifStatementToUse = 1;
-	}*/
+
+	else if(cmd == "Makeitem" || cmd == "makeitem") {
+	  whatToType = "Type roomId;item id;Name;Text;";
+	  ifStatementToUse = 2;
+	}
 	else if(ifStatementToUse == 2){
-	  text = "Make Character(" + cmd + ")";
+	  if(itemToFile(cmd, fileName) == false)
+	    whatToType = "Wrong input format";
+	  else
+	    whatToType = "Creation successful";
+	  ifStatementToUse = 0;
+	}
+	else if(cmd == "Makecharacter" || cmd == "makecharacter") {
+	  whatToType = "Type roomId;character id;Name;Text;";
+	  ifStatementToUse = 3;
+	}
+	else if(ifStatementToUse == 3){
+	  if(characterToFile(cmd, fileName) == false)
+	    whatToType = "Wrong input format";
+	  else
+	    whatToType = "Creation successful";
 	  ifStatementToUse = 0;
 	}
 	else{
@@ -93,11 +114,11 @@ int editor(SDL_Surface *screen, SDL_Event event, string fileName, string imagePa
 	if( event.button.button == SDL_BUTTON_LEFT ){
 	  mx = event.button.x;
 	  my = event.button.y;
-	  if((mx > 610) && (mx < 935) && (my > 632) && (my < 700)){
+	  if((mx > 610) && (mx < 935) && (my > 349) && (my < 435)){
 	    return 1;
 	  }
-	  else if((mx > 610) && (mx < 935) && (my > 383) && (my < 447)){
-	    text = helpFunction();
+	  else if((mx > 610) && (mx < 935) && (my > 203) && (my < 289)){
+	    text = helpFunction(ifStatementToUse);
 	  }
 	}
       }
@@ -117,8 +138,19 @@ int editor(SDL_Surface *screen, SDL_Event event, string fileName, string imagePa
 
 }
 
-string helpFunction(){
-  string returnString = "Commands available:                 ";
-  returnString += "'Makeroom', 'Makeitem', 'Makecharacter'";
+string helpFunction(const int helpStatus){
+  string returnString;
+  if(helpStatus == 1){
+    returnString += "roomId=1XXX,  ImagePath=imagename.png,  DoorId=<id to a room>1XXX,  winRoom=(1 or 0)";
+  }
+  else if(helpStatus == 2){
+    returnString += "roomId=1XXX,  itemId=2XXX";
+  }
+  else if(helpStatus == 3){
+    returnString += "roomId=1XXX,  characterId=3XXX";
+  }
+  else{
+    returnString += "Commands available:                 " + "'Makeroom', 'Makeitem', 'Makecharacter'";
+  }
   return returnString;
 }

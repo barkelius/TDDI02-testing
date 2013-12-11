@@ -8,7 +8,40 @@
 
 using namespace std;
 
+Player::Player(string filePath){
+  ifstream file;
+  string x,y;
+  int b;
+  file.open(filePath.c_str());
+  if(!file.is_open())
+    cerr << "error: can't open file: ."<< filePath << ".\n" ;
+  while(!file.eof()){
+    getline(file,x,';');
+    b = stringToInt(x);
+    if(b >= 3000 || b < 2000)
+      break;
+    getline(file,x,';');
+    getline(file,y,';');
+    Portable item = Portable(filePath,b);
+    inventory.push_back(item);
+  }
+  cout << "b = " << b << endl;
+  if(b < 80000){
+    defaultAdventureImage = x;
+    getline(file,x,';');
+    b = stringToInt(x);
+  } else {
+    defaultAdventureImage = "";
+  }
+  cout << "defaultAdventureImage = ." << defaultAdventureImage << "." << endl;
+  Room tmpRoom(filePath,b-80000);
+  currentRoom = tmpRoom;
+  file.close();
+  
+  currentFile = filePath;
+}
 
+/*
 Player::Player(string filePath){
   ifstream file;
   string x,y;
@@ -32,6 +65,7 @@ Player::Player(string filePath){
   
   currentFile = filePath;
 }
+*/
 
 void Player::printPlayer(){
   /*  for(unsigned i = 0; i < inventory.size(); ++i){
@@ -156,9 +190,7 @@ string Player::walk(string direction){
         returnString += " ";
     }
     returnString += "Description: " + currentRoom.room_description;
-  }
-  if(currentRoom.isWinRoom()){
-    return "YOU WON!";
+    currentRoom.printRoom();
   }
   return returnString;
 }
@@ -191,7 +223,7 @@ void Player::moveFile(){
   tmp = currentFile.substr(0,pos);
   cout << tmp << endl;
   fileName = currentFile.substr(pos+2,currentFile.length());
-  //cout << currentFile << endl;
+  cout << fileName << endl;
   if(tmp == "Adventures"){
     vector <string> lines;
     ifstream inFile;
@@ -207,6 +239,10 @@ void Player::moveFile(){
     for(int i = 0; i < lines.size() - 1; ++i){
       outFile << lines[i] << "\n";
     }
+    currentFile = "Saved games//" + fileName;
   }
 }
 
+bool Player::isGameOver(){
+  return currentRoom.isWinRoom();
+};

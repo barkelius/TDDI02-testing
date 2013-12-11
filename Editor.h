@@ -6,5 +6,5 @@
 #include <string>
 
 int editor(SDL_Surface *screen, SDL_Event event, std::string fileName, std::string imagePath);
-std::string helpFunction();
+std::string helpFunction(const int helpStatus);
 #endif

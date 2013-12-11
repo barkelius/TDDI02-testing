@@ -1,0 +1,17 @@
+Shit som e viktigt i programmet:
+
+roomImage size = 509*359 px
+background image size = 1024*720 px
+
+kordinater:
+	background_image_black.png:
+		help: 611,397; 933,461
+		Inventory: 611.507; 933,571
+		Save&Quit: 611,618; 933,683
+	
+	editorBackgroundImage.png:
+		Help: 640,203; 963,289
+		Save&Quit: 640,349; 963,435
+		
+	
+		

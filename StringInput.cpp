@@ -4,6 +4,7 @@
 #include <string>
 #include "sdlFunctions.h"
 #include "StringInput.h"
+#include <vector>
 
 using namespace std;
 
@@ -30,10 +31,10 @@ string StringInput::getStr(){
   return str;
 }
 
-void StringInput::handleInput(SDL_Event event){
+void StringInput::handleInput(SDL_Event event,int textLength){
   if(event.type == SDL_KEYDOWN){
     string tmp = str;
-    if(str.length() <= 33){
+    if(str.length() <= textLength){
       //om man tycker ner space
       if(event.key.keysym.unicode == (Uint16)' '){
 	str += (char)event.key.keysym.unicode;
@@ -75,6 +76,10 @@ void StringInput::handleInput(SDL_Event event){
 
 void StringInput:: showMessage(SDL_Surface *screen, int x, int y){
   if(text != NULL){
-    applySurface(x,y, text, screen);
+     if(str.size() > 76)
+       applySurface((935 - text->w),y, text, screen);
+     else{
+       applySurface(x,y, text, screen);
+     }
   }
 }

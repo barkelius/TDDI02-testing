@@ -110,7 +110,7 @@ int playChoiceMenu(SDL_Surface *screen, SDL_Event event){
   bool quit = false;
   int mx = 0;
   int my = 0;
-  menuImage = IMG_Load("editChoiceMenu.png");
+  menuImage = IMG_Load("playChoiceMenu.png");
     while(quit == false){
     applySurface(0,0, menuImage, screen);
     while(SDL_PollEvent(&event)){
@@ -119,10 +119,14 @@ int playChoiceMenu(SDL_Surface *screen, SDL_Event event){
 	  mx = event.button.x;
 	  my = event.button.y;
 	  if((mx > 275) && (mx < 718) && (my > 180) && (my < 273)){
-	    playAdventureMenu(screen,event, "Adventures");
+	    int returnStatus = playAdventureMenu(screen,event, "Adventures");	    
+	    if(returnStatus == 5)
+	      return 5;
 	  }
 	  else if((mx > 275) && (mx < 718) && (my > 305) && (my < 398)){
-	    playAdventureMenu(screen,event, "Saved games");
+	    int returnStatus = playAdventureMenu(screen,event, "Saved games");
+	    if(returnStatus == 5)
+	      return 5;
 	  }
 	  else if((mx > 275) && (mx < 718) && (my > 430) && (my < 523)){
 	    return 0;
@@ -151,7 +155,7 @@ int playAdventureMenu(SDL_Surface *screen, SDL_Event event, string filePath){
   int my = 0;
   TTF_Font *font = NULL;
   SDL_Color textColor = {255, 255, 255}; 
-  font = TTF_OpenFont("Blockstepped.ttf", 28);
+  font = TTF_OpenFont("arial.ttf", 28);
   menuImage = IMG_Load("playChooseAdventure.png");
     while(quit == false){
       applySurface(0,0, menuImage, screen);
@@ -166,7 +170,9 @@ int playAdventureMenu(SDL_Surface *screen, SDL_Event event, string filePath){
                     pos = fileNames.find(" ", 36*i);
                     temp = fileNames.substr(36*i, pos-36*i);
                     //cout << "." << temp << "." << endl;
-                    game(screen,event,filePath + "//" + temp);
+                    int returnStatus = game(screen,event,filePath + "//" + temp);
+		    if(returnStatus == 5)
+		      return 5;
                 }
                 else if((mx > 278) && (mx < 741) && (my > 603) && (my < 681) ){
                     quit = true;
@@ -196,7 +202,7 @@ int editAdventureMenu(SDL_Surface *screen, SDL_Event event){
   int my = 0;
   TTF_Font *font = NULL;
   SDL_Color textColor = {255, 255, 255};
-  font = TTF_OpenFont("Blockstepped.ttf", 28);
+  font = TTF_OpenFont("arial.ttf", 28);
   menuImage = IMG_Load("editorChooseAdventure.png");
     while(quit == false){
       applySurface(0,0, menuImage, screen);
@@ -232,15 +238,16 @@ int editAdventureMenu(SDL_Surface *screen, SDL_Event event){
 int editNewAdventureFile(SDL_Surface *screen, SDL_Event event){
   SDL_Surface *menuImage = NULL;
   bool quit = false;
+  int textLength = 20;
   int mx = 0;
   int my = 0;
   StringInput inputText;
   string text;
-  menuImage = IMG_Load("mainMenu.png");
+  menuImage = IMG_Load("newAdventureFilename.png");
   while(quit == false){
     applySurface(0,0, menuImage, screen);
     while(SDL_PollEvent(&event)){
-      inputText.handleInput(event);
+      inputText.handleInput(event,textLength);
       if((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_RETURN)){
 	text = inputText.getStr();
 	ofstream newFile;
@@ -278,15 +285,16 @@ int editNewAdventureFile(SDL_Surface *screen, SDL_Event event){
 int editNewAdventureImage(SDL_Surface *screen, SDL_Event event, string text){
   SDL_Surface *menuImage = NULL;
   bool quit = false;
+  int textLength = 20;
   int mx = 0;
   int my = 0;
   StringInput inputText;
   string imagePath;
-  menuImage = IMG_Load("mainMenu.png");
+  menuImage = IMG_Load("defaultImageName.png");
   while(quit == false){
     applySurface(0,0, menuImage, screen);
     while(SDL_PollEvent(&event)){
-      inputText.handleInput(event);
+      inputText.handleInput(event,textLength);
       if((event.type == SDL_KEYDOWN) && (event.key.keysym.sym == SDLK_RETURN)){
 	imagePath = inputText.getStr();
 	
