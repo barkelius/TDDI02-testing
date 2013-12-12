@@ -31,6 +31,9 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 
   background = IMG_Load("background_image_black.png");
   roomImage = IMG_Load(spelare.getRoomImage().c_str());
+  if(roomImage == NULL){
+    roomImage = IMG_Load(spelare.getDefaultImage().c_str());
+  }
   font = TTF_OpenFont("arial.ttf", 28);
 
   StringInput inputText;
@@ -74,9 +77,9 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 	  roomDescriptionText = spelare.walk(cmd2);
 	  text3 = "";
 	  roomImage = IMG_Load(spelare.getRoomImage().c_str());
-	  //if(roomImage == NULL){
-       // roomImage = IMG_Load(spelare.getDefaultImage().c_str());
-	  //}
+	  if(roomImage == NULL){
+	    roomImage = IMG_Load(spelare.getDefaultImage().c_str());
+	    }
 	  text  = "";
 	}
 	else if(cmd == "Pickup" || cmd == "pickup"){
@@ -94,7 +97,6 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 	roomDescriptionText = "";
 	text3 ="";
 	background = IMG_Load("gameOver.png");
-	//return 5;
 	roomImage = NULL;
 	if(event.type == SDL_QUIT){
 	  return 5;
@@ -102,7 +104,7 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
       }
 
       if(event.type == SDL_QUIT){
-	return 0;
+	return 5;
       }
       if(event.type == SDL_MOUSEBUTTONDOWN){
 	if( event.button.button == SDL_BUTTON_LEFT ){
@@ -128,8 +130,6 @@ int game(SDL_Surface *screen, SDL_Event event, string fileName){
 
     SDL_Flip(screen);
 
-    //cout << "isWinRoom" << spelare.isGameOver() << endl;
-    //spelare.printPlayer();
   }
 
   cleanUp(background,message,font);
